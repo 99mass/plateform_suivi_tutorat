@@ -1,0 +1,39 @@
+#docker-composer.yml
+version: '3.8'
+
+services:
+  my-spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://suivi_tutorat_db:3306/suivi_tutorat_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
+    depends_on:
+      - suivi_tutorat_db
+
+  suivi_tutorat_db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE: suivi_tutorat_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: suivi_tutorat_db
+      PMA_PORT: 3306
+    depends_on:
+      - suivi_tutorat_db
+
+volumes:
+  db_data:
