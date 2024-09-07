@@ -7,7 +7,7 @@
     - [X] spring-boot-starter-data-jpa
     - [X] spring-boot-starter-web
     - [X] spring-boot-starter-security
-    - [ ] mysql-connector-java
+    - [X] mysql-connector-java
     - [ ] jsonwebtoken: 0.12.3
     - [ ] springdoc-openapi-starter-webmvc-ui: 2.3.0
 
