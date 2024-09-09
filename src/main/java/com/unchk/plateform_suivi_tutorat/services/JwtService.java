@@ -8,6 +8,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import jakarta.servlet.http.HttpServletRequest;
 
 import jakarta.annotation.PostConstruct;
 import java.security.Key;
@@ -80,4 +81,20 @@ public class JwtService {
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
+
+    public String extractRoleFromToken(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        String jwt = null;
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwt = authorizationHeader.substring(7);
+        }
+
+        if (jwt != null) {
+            Claims claims = extractAllClaims(jwt);
+            return claims.get("role", String.class);
+        }
+
+        throw new RuntimeException("Token invalide ou manquant");
+    }
+
 }
