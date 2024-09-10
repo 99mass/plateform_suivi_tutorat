@@ -97,4 +97,21 @@ public class JwtService {
         throw new RuntimeException("Token invalide ou manquant");
     }
 
+
+    public String extractUsernameFromToken(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        String jwt = null;
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwt = authorizationHeader.substring(7);
+        }
+
+        if (jwt != null) {
+            Claims claims = extractAllClaims(jwt);
+            return claims.get("email", String.class);
+        }
+
+        throw new RuntimeException("Token invalide ou manquant");
+    }
+
+
 }

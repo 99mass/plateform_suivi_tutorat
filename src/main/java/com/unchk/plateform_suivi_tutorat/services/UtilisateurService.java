@@ -34,6 +34,11 @@ public class UtilisateurService {
         return utilisateurRepository.findById(id);
     }
 
+    public Optional<Utilisateur> getUserByEmail(String email) {
+        return utilisateurRepository.findByEmail(email);
+    }
+
+
     public Utilisateur createUser(Utilisateur utilisateur) {
         if (utilisateur.getNom() == null || utilisateur.getNom().isEmpty() ||
                 utilisateur.getPrenom() == null || utilisateur.getPrenom().isEmpty()) {
@@ -76,7 +81,10 @@ public class UtilisateurService {
                 }
                 user.setMotDePasse(passwordEncoder.encode(utilisateurDetails.getMotDePasse()));
             }
-            user.setRole(utilisateurDetails.getRole());
+            if (utilisateurDetails.getRole() != null) {
+                user.setRole(utilisateurDetails.getRole());
+            }
+
             return utilisateurRepository.save(user);
         }).orElseThrow(() -> new RuntimeException(USER_NOT_FOUND_MESSAGE));
     }
