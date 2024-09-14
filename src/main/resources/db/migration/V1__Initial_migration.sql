@@ -8,19 +8,9 @@ CREATE TABLE Utilisateur (
   role ENUM('admin', 'tracker', 'tuteur') NOT NULL
 );
 
-CREATE TABLE Administrateur (
-  id INT PRIMARY KEY,
-  FOREIGN KEY (id) REFERENCES Utilisateur(id)
-);
-
-CREATE TABLE EquipeTracking (
-  id INT PRIMARY KEY,
-  FOREIGN KEY (id) REFERENCES Utilisateur(id)
-);
-
 CREATE TABLE Tuteur (
   id INT PRIMARY KEY,
-  FOREIGN KEY (id) REFERENCES Utilisateur(id)
+  FOREIGN KEY (id) REFERENCES Utilisateur(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Module (
@@ -33,7 +23,7 @@ CREATE TABLE Groupe (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nom VARCHAR(255) NOT NULL,
   module_id INT,
-  FOREIGN KEY (module_id) REFERENCES Module(id)
+  FOREIGN KEY (module_id) REFERENCES Module(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Seance (
@@ -45,23 +35,23 @@ CREATE TABLE Seance (
   tuteur_id INT,
   module_id INT,
   groupe_id INT,
-  FOREIGN KEY (tuteur_id) REFERENCES Tuteur(id),
-  FOREIGN KEY (module_id) REFERENCES Module(id),
-  FOREIGN KEY (groupe_id) REFERENCES Groupe(id)
+  FOREIGN KEY (tuteur_id) REFERENCES Tuteur(id) ON DELETE SET NULL,
+  FOREIGN KEY (module_id) REFERENCES Module(id) ON DELETE CASCADE,
+  FOREIGN KEY (groupe_id) REFERENCES Groupe(id) ON DELETE CASCADE
 );
 
 CREATE TABLE TuteurModule (
   tuteur_id INT,
   module_id INT,
   PRIMARY KEY (tuteur_id, module_id),
-  FOREIGN KEY (tuteur_id) REFERENCES Tuteur(id),
-  FOREIGN KEY (module_id) REFERENCES Module(id)
+  FOREIGN KEY (tuteur_id) REFERENCES Tuteur(id) ON DELETE CASCADE,
+  FOREIGN KEY (module_id) REFERENCES Module(id) ON DELETE CASCADE
 );
 
 CREATE TABLE TuteurGroupe (
   tuteur_id INT,
   groupe_id INT,
   PRIMARY KEY (tuteur_id, groupe_id),
-  FOREIGN KEY (tuteur_id) REFERENCES Tuteur(id),
-  FOREIGN KEY (groupe_id) REFERENCES Groupe(id)
+  FOREIGN KEY (tuteur_id) REFERENCES Tuteur(id) ON DELETE CASCADE,
+  FOREIGN KEY (groupe_id) REFERENCES Groupe(id) ON DELETE CASCADE
 );

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Tuteur")
+@DiscriminatorValue("Tuteur")
 public class Tuteur extends Utilisateur {
     @ManyToMany
     @JoinTable(
@@ -22,4 +22,47 @@ public class Tuteur extends Utilisateur {
             inverseJoinColumns = @JoinColumn(name = "groupe_id")
     )
     private Set<Groupe> groupes = new HashSet<>();
+
+    // Constructors
+    public Tuteur() {
+        super();
+    }
+
+    public Tuteur(String nom, String prenom, String email, String telephone, String motDePasse) {
+        super(nom, prenom, email, telephone, motDePasse);  // Appel au constructeur de la classe parent
+    }
+
+    // Getters and Setters for `modules` and `groupes`
+    public Set<Module> getModules() {
+        return modules;
+    }
+
+    public void setModules(Set<Module> modules) {
+        this.modules = modules;
+    }
+
+    public Set<Groupe> getGroupes() {
+        return groupes;
+    }
+
+    public void setGroupes(Set<Groupe> groupes) {
+        this.groupes = groupes;
+    }
+
+    // Optional: Add methods to manage the modules and groupes relationships
+    public void addModule(Module module) {
+        this.modules.add(module);
+    }
+
+    public void removeModule(Module module) {
+        this.modules.remove(module);
+    }
+
+    public void addGroupe(Groupe groupe) {
+        this.groupes.add(groupe);
+    }
+
+    public void removeGroupe(Groupe groupe) {
+        this.groupes.remove(groupe);
+    }
 }

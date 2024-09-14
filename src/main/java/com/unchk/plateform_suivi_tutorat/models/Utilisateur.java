@@ -11,6 +11,9 @@ import java.util.Collections;
 
 @Data
 @Entity
+//@DiscriminatorColumn(name = "discriminator", discriminatorType = DiscriminatorType.STRING)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "discriminator")
 @Table(name = "Utilisateur")
 public class Utilisateur implements UserDetails {
 
@@ -38,6 +41,19 @@ public class Utilisateur implements UserDetails {
 
     public enum Role {
         admin, tracker, tuteur
+    }
+
+    // Constructeur par défaut
+    public Utilisateur() {
+    }
+
+    // Constructeur avec paramètres
+    public Utilisateur(String nom, String prenom, String email, String telephone, String motDePasse) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.telephone = telephone;
+        this.motDePasse = motDePasse;
     }
 
     @Override
@@ -130,4 +146,5 @@ public class Utilisateur implements UserDetails {
     public void setRole(Role role) {
         this.role = role;
     }
+
 }

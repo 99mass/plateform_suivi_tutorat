@@ -271,24 +271,15 @@ public class UtilisateurController {
             String role = jwtService.extractRoleFromToken(request);
             String email = jwtService.extractUsernameFromToken(request);
 
-            // Ajout de logs pour identifier les valeurs extraites
-            System.out.println("Role extrait du token: " + role);
-            System.out.println("Email extrait du token: " + email);
-
             // Récupère l'utilisateur à modifier à partir de l'ID
             Optional<Utilisateur> userToUpadate = utilisateurService.getUserById(id);
 
             if (userToUpadate.isEmpty()) {
-                System.out.println("Utilisateur non trouvé pour ID: " + id);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ErrorResponse(UtilisateurService.USER_NOT_FOUND_MESSAGE));
             }
 
             Utilisateur targetUser = userToUpadate.get();
-            System.out.println("Utilisateur mis à jour: " + targetUser.getEmail());
-            if (email.equals(targetUser.getEmail()) ){
-
-            }
 
             if (email.equals(targetUser.getEmail()) || USER_ROLE_ADMIN.equals(role) || USER_ROLE_TRACKER.equals(role)) {
 
