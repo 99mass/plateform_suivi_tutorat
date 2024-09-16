@@ -20,6 +20,12 @@ import java.util.stream.Collectors;
 @Service
 public class TuteurService {
 
+    public static final String TUTEUR_NOT_FOUND = "Tuteur non trouvé";
+    public static final String MODULE_NOT_FOUND = "Module non trouvé";
+    public static final String GROUPE_NOT_FOUND = "Groupe non trouvé";
+    public static final String MODULE_ALREADY_EXISTS = "Module est déjà affecté à ce tuteur";
+    public static final String GROUPE_ALREADY_EXISTS = "Groupe est déjà affecté à ce tuteur";
+
     @Autowired
     private TuteurRepository tuteurRepository;
 
@@ -31,7 +37,7 @@ public class TuteurService {
 
     public Tuteur getTuteurById(Long id) {
         return tuteurRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Tuteur not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(TUTEUR_NOT_FOUND));
     }
 
     public TuteurDTO convertToDTO(Tuteur tuteur) {
@@ -59,7 +65,12 @@ public class TuteurService {
     public TuteurDTO addModuleToTuteur(Long tuteurId, Long moduleId) {
         Tuteur tuteur = getTuteurById(tuteurId);
         Module module = moduleRepository.findById(moduleId)
-                .orElseThrow(() -> new EntityNotFoundException("Module not found with id: " + moduleId));
+                .orElseThrow(() -> new EntityNotFoundException(MODULE_NOT_FOUND));
+
+        if (tuteur.getModules().stream().anyMatch(existingModule -> existingModule.getId().equals(moduleId))) {
+            throw new RuntimeException(MODULE_ALREADY_EXISTS);
+        }
+
         tuteur.addModule(module);
         tuteurRepository.save(tuteur);
         tuteurRepository.flush();  // Ensures changes are flushed to the database
@@ -70,7 +81,12 @@ public class TuteurService {
     public TuteurDTO addGroupeToTuteur(Long tuteurId, Long groupeId) {
         Tuteur tuteur = getTuteurById(tuteurId);
         Groupe groupe = groupeRepository.findById(groupeId)
-                .orElseThrow(() -> new EntityNotFoundException("Groupe not found with id: " + groupeId));
+                .orElseThrow(() -> new EntityNotFoundException(GROUPE_NOT_FOUND ));
+
+        if (tuteur.getGroupes().stream().anyMatch(existingGroupe -> existingGroupe.getId().equals(groupeId))) {
+            throw new RuntimeException(GROUPE_ALREADY_EXISTS );
+        }
+
         tuteur.addGroupe(groupe);
         tuteur = tuteurRepository.save(tuteur);
         return convertToDTO(tuteur);
