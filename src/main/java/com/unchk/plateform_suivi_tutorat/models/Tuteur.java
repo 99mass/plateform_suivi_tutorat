@@ -5,7 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue("Tuteur")
+//@DiscriminatorValue("Tuteur")
+@Table(name = "Tuteur")
 public class Tuteur extends Utilisateur {
     @ManyToMany
     @JoinTable(
@@ -26,10 +27,6 @@ public class Tuteur extends Utilisateur {
     // Constructors
     public Tuteur() {
         super();
-    }
-
-    public Tuteur(String nom, String prenom, String email, String telephone, String motDePasse) {
-        super(nom, prenom, email, telephone, motDePasse);  // Appel au constructeur de la classe parent
     }
 
     // Getters and Setters for `modules` and `groupes`

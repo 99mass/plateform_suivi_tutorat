@@ -173,9 +173,16 @@ public class UtilisateurController {
     @PostMapping("/create-admin")
     public ResponseEntity<Object> createUser(@RequestBody Utilisateur utilisateur) {
         try {
-            utilisateur.setMotDePasse(DEFAULT_PASSWORD);
-            Utilisateur createdUser = utilisateurService.createUser(utilisateur);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+            if (utilisateur.getRole().name().equals(Utilisateur.Role.admin.name())){
+
+                utilisateur.setMotDePasse(DEFAULT_PASSWORD);
+                Utilisateur createdUser = utilisateurService.createUser(utilisateur);
+                return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+            }else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(new ErrorResponse(USER_FORBIDDEN_MESSAGE));
+            }
+
         } catch (RuntimeException e) {
             return handleCreateOrUpdateError(e);
         }

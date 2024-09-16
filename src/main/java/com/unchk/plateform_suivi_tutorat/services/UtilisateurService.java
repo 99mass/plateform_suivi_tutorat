@@ -1,7 +1,9 @@
 package com.unchk.plateform_suivi_tutorat.services;
 
+import com.unchk.plateform_suivi_tutorat.models.Tuteur;
 import com.unchk.plateform_suivi_tutorat.models.Utilisateur;
 import com.unchk.plateform_suivi_tutorat.Utiles.Helper;
+import com.unchk.plateform_suivi_tutorat.repositories.TuteurRepository;
 import com.unchk.plateform_suivi_tutorat.repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,9 +21,13 @@ public class UtilisateurService {
     public static final String INVALID_PASSWORD_MESSAGE = "Le mot de passe doit contenir au moins 6 caractères";
     public static final String EMPTY_MESSAGE = "Toutes les informations doivent être fournies";
     public static final String USER_DELETE_ERROR_MESSAGE = "Erreur lors de la suppression de l'utilisateur";
+    public static final String USER_EXIST_MESSAGE = "Un utilisateur avec cet email existe déjà";
 
     @Autowired
     private UtilisateurRepository utilisateurRepository;
+
+    @Autowired
+    private TuteurRepository tuteurRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -38,17 +44,37 @@ public class UtilisateurService {
         return utilisateurRepository.findByEmail(email);
     }
 
-
     public Utilisateur createUser(Utilisateur utilisateur) {
         if (utilisateur.getNom() == null || utilisateur.getNom().isEmpty() ||
                 utilisateur.getPrenom() == null || utilisateur.getPrenom().isEmpty()) {
             throw new RuntimeException(EMPTY_MESSAGE);
         }
 
+        // Vérifiez si l'email existe déjà dans la base de données
+        Optional<Utilisateur> existingUser = utilisateurRepository.findByEmail(utilisateur.getEmail());
+        if (existingUser.isPresent()) {
+            throw new RuntimeException(USER_EXIST_MESSAGE);
+        }
+
         validateUtilisateur(utilisateur);
 
         // Encrypt the password before saving
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
+
+        // Si l'utilisateur est un tuteur, le créer en tant que Tuteur
+        if (utilisateur.getRole() == Utilisateur.Role.tuteur) {
+            Tuteur tuteur = new Tuteur();
+            tuteur.setNom(utilisateur.getNom());
+            tuteur.setPrenom(utilisateur.getPrenom());
+            tuteur.setEmail(utilisateur.getEmail());
+            tuteur.setTelephone(utilisateur.getTelephone());
+            tuteur.setMotDePasse(utilisateur.getMotDePasse());
+            tuteur.setRole(Utilisateur.Role.tuteur);  // Définir le rôle du tuteur
+
+            return tuteurRepository.save(tuteur);
+        }
+
+        // Si ce n'est pas un tuteur, sauvegarder comme un utilisateur normal
         return utilisateurRepository.save(utilisateur);
     }
 

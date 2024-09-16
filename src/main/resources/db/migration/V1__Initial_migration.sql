@@ -4,7 +4,7 @@ CREATE TABLE Utilisateur (
   prenom VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL UNIQUE,
   telephone VARCHAR(20),
-  mot_de_passe VARCHAR(255) NOT NULL,
+  motDePasse VARCHAR(255) NOT NULL,
   role ENUM('admin', 'tracker', 'tuteur') NOT NULL
 );
 
