@@ -5,6 +5,8 @@ import com.unchk.plateform_suivi_tutorat.models.Module;
 import com.unchk.plateform_suivi_tutorat.models.Utilisateur;
 import com.unchk.plateform_suivi_tutorat.services.JwtService;
 import com.unchk.plateform_suivi_tutorat.services.ModuleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +34,13 @@ public class ModuleController {
         this.jwtService = jwtService;
     }
 
-    // Route pour récupérer tous les modules
+    @Operation(summary = "Récupérer tous les modules",
+            description = "Retourne une liste de tous les modules disponibles. Accessible aux administrateurs, trackers, et tuteurs.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Liste des modules récupérée avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @GetMapping("/all")
     public ResponseEntity<Object> getAllModules(HttpServletRequest request) {
         try {
@@ -51,7 +59,14 @@ public class ModuleController {
         }
     }
 
-    // Route pour récupérer un module par ID
+    @Operation(summary = "Récupérer un module par ID",
+            description = "Retourne les détails d'un module spécifique basé sur l'ID. Accessible aux administrateurs, trackers, et tuteurs.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Module récupéré avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "404", description = "Module non trouvé"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @GetMapping("/{id}")
     public ResponseEntity<Object> getModuleById(@PathVariable Long id, HttpServletRequest request) {
         try {
@@ -76,7 +91,13 @@ public class ModuleController {
         }
     }
 
-    // Route pour créer un module
+    @Operation(summary = "Créer un nouveau module",
+            description = "Crée un nouveau module. Accessible uniquement aux administrateurs et trackers.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Module créé avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @PostMapping("/create")
     public ResponseEntity<Object> createModule(@RequestBody Module module, HttpServletRequest request) {
         try {
@@ -95,7 +116,14 @@ public class ModuleController {
         }
     }
 
-    // Route pour mettre à jour un module
+    @Operation(summary = "Mettre à jour un module",
+            description = "Met à jour les informations d'un module existant. Accessible uniquement aux administrateurs et trackers.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Module mis à jour avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "404", description = "Module non trouvé"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @PutMapping("/update/{id}")
     public ResponseEntity<Object> updateModule(@PathVariable Long id, @RequestBody Module moduleDetails, HttpServletRequest request) {
         try {
@@ -114,7 +142,14 @@ public class ModuleController {
         }
     }
 
-    // Route pour supprimer un module
+    @Operation(summary = "Supprimer un module",
+            description = "Supprime un module par ID. Accessible uniquement aux administrateurs et trackers.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Module supprimé avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "404", description = "Module non trouvé"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> deleteModule(@PathVariable Long id, HttpServletRequest request) {
         try {

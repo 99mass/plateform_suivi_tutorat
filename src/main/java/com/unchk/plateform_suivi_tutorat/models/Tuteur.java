@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-//@DiscriminatorValue("Tuteur")
 @Table(name = "Tuteur")
 public class Tuteur extends Utilisateur {
     @ManyToMany

@@ -5,6 +5,8 @@ import com.unchk.plateform_suivi_tutorat.models.Groupe;
 import com.unchk.plateform_suivi_tutorat.models.Utilisateur;
 import com.unchk.plateform_suivi_tutorat.services.GroupeService;
 import com.unchk.plateform_suivi_tutorat.services.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,12 +35,25 @@ public class GroupeController {
         this.jwtService = jwtService;
     }
 
+    @Operation(summary = "Récupérer tous les groupes",
+            description = "Retourne une liste de tous les groupes disponibles.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Liste des groupes récupérée avec succès"),
+                    @ApiResponse(responseCode = "500", description = "Erreur serveur")
+            })
     @GetMapping
     public ResponseEntity<List<Groupe>> getAllGroupes() {
         List<Groupe> groupes = groupeService.getAllGroupes();
         return new ResponseEntity<>(groupes, HttpStatus.OK);
     }
 
+    @Operation(summary = "Récupérer un groupe par ID",
+            description = "Retourne les détails d'un groupe spécifique basé sur l'ID.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Groupe récupéré avec succès"),
+                    @ApiResponse(responseCode = "404", description = "Groupe non trouvé"),
+                    @ApiResponse(responseCode = "500", description = "Erreur serveur")
+            })
     @GetMapping("/{id}")
     public ResponseEntity<Groupe> getGroupeById(@PathVariable Long id) {
         Optional<Groupe> groupe = groupeService.getGroupeById(id);
@@ -46,6 +61,14 @@ public class GroupeController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
+    @Operation(summary = "Créer un nouveau groupe",
+            description = "Crée un nouveau groupe. Accessible uniquement aux administrateurs et trackers.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Groupe créé avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide"),
+                    @ApiResponse(responseCode = "500", description = "Erreur serveur")
+            })
     @PostMapping("/create")
     public ResponseEntity<Object> createGroupe(@RequestBody Groupe groupe, HttpServletRequest request) {
         try {
@@ -64,6 +87,15 @@ public class GroupeController {
         }
     }
 
+    @Operation(summary = "Mettre à jour un groupe",
+            description = "Met à jour les informations d'un groupe existant. Accessible uniquement aux administrateurs et trackers.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Groupe mis à jour avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "404", description = "Groupe non trouvé"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide"),
+                    @ApiResponse(responseCode = "500", description = "Erreur serveur")
+            })
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateGroupe(@PathVariable Long id, @RequestBody Groupe groupeDetails, HttpServletRequest request) {
         try {
@@ -82,6 +114,15 @@ public class GroupeController {
         }
     }
 
+    @Operation(summary = "Supprimer un groupe",
+            description = "Supprime un groupe par ID. Accessible uniquement aux administrateurs et trackers.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Groupe supprimé avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "404", description = "Groupe non trouvé"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide"),
+                    @ApiResponse(responseCode = "500", description = "Erreur serveur")
+            })
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteGroupe(@PathVariable Long id, HttpServletRequest request) {
         try {

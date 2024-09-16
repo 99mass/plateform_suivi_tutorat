@@ -4,6 +4,9 @@ import com.unchk.plateform_suivi_tutorat.Utiles.ErrorResponse;
 import com.unchk.plateform_suivi_tutorat.models.Utilisateur;
 import com.unchk.plateform_suivi_tutorat.services.JwtService;
 import com.unchk.plateform_suivi_tutorat.services.UtilisateurService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +38,12 @@ public class UtilisateurController {
         this.jwtService = jwtService;
     }
 
-    // Route pour récupérer tous les utilisateurs
+    @Operation(summary = "Récupérer tous les utilisateurs")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Succès"),
+            @ApiResponse(responseCode = "403", description = "Accès interdit"),
+            @ApiResponse(responseCode = "400", description = "Requête invalide")
+    })
     @GetMapping("/all")
     public ResponseEntity<Object> getAllUsers(HttpServletRequest request) {
         try {
@@ -54,7 +62,13 @@ public class UtilisateurController {
         }
     }
 
-    // Route pour récupérer uniquement les administrateurs
+    @Operation(summary = "Récupérer tous les administrateurs",
+            description = "Retourne une liste de tous les administrateurs. Accessible uniquement aux administrateurs.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Liste des administrateurs récupérée avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @GetMapping("/admins")
     public ResponseEntity<Object> getAdmins(HttpServletRequest request) {
         try {
@@ -75,7 +89,13 @@ public class UtilisateurController {
         }
     }
 
-    // Route pour récupérer uniquement les trackers
+    @Operation(summary = "Récupérer tous les trackers",
+            description = "Retourne une liste de tous les trackers. Accessible uniquement aux administrateurs.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Liste des trackers récupérée avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @GetMapping("/trackers")
     public ResponseEntity<Object> getTrackers(HttpServletRequest request) {
         try {
@@ -96,7 +116,13 @@ public class UtilisateurController {
         }
     }
 
-    // Route pour récupérer uniquement les tuteurs
+    @Operation(summary = "Récupérer tous les tuteurs",
+            description = "Retourne une liste de tous les tuteurs. Accessible aux administrateurs et trackers.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Liste des tuteurs récupérée avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @GetMapping("/tuteurs")
     public ResponseEntity<Object> getTuteurs(HttpServletRequest request) {
         try {
@@ -117,6 +143,14 @@ public class UtilisateurController {
         }
     }
 
+    @Operation(summary = "Récupérer un utilisateur par ID",
+            description = "Retourne les détails d'un utilisateur spécifique basé sur l'ID. L'accès est contrôlé par les rôles.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Utilisateur récupéré avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUserById(@PathVariable Long id, HttpServletRequest request) {
         try {
@@ -169,7 +203,13 @@ public class UtilisateurController {
         }
     }
 
-
+    @Operation(summary = "Créer un nouvel administrateur",
+            description = "Crée un nouvel administrateur. Accessible uniquement aux administrateurs.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Administrateur créé avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @PostMapping("/create-admin")
     public ResponseEntity<Object> createUser(@RequestBody Utilisateur utilisateur) {
         try {
@@ -188,6 +228,13 @@ public class UtilisateurController {
         }
     }
 
+    @Operation(summary = "Créer un nouvel Tracker",
+            description = "Crée un nouvel tracker. Accessible uniquement aux administrateurs.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Tracker créé avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @PostMapping("/create-tracker")
     public ResponseEntity<Object> createTracker(@RequestBody Utilisateur utilisateur, HttpServletRequest request) {
         try {
@@ -208,6 +255,13 @@ public class UtilisateurController {
         }
     }
 
+    @Operation(summary = "Créer un nouvel Tuteur",
+            description = "Crée un nouvel tuteur. Accessible aux administrateurs et trackers.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Tuteur créé avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @PostMapping("/create-tuteur")
     public ResponseEntity<Object> createTuteur(@RequestBody Utilisateur utilisateur, HttpServletRequest request) {
         try {
@@ -227,6 +281,14 @@ public class UtilisateurController {
         }
     }
 
+    @Operation(summary = "Mettre à jour un administrateur",
+            description = "Met à jour les informations d'un administrateur. Accessible uniquement aux administrateurs.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Administrateur mis à jour avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "404", description = "Administrateur non trouvé"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @PutMapping("/update-admin/{id}")
     public ResponseEntity<Object> updateAdmin(@PathVariable Long id, @RequestBody Utilisateur utilisateurDetails, HttpServletRequest request) {
         try {
@@ -244,6 +306,14 @@ public class UtilisateurController {
         }
     }
 
+    @Operation(summary = "Mettre à jour un Tracker",
+            description = "Met à jour les informations d'un tracker. Accessible uniquement au tracker lui-même ou aux administrateurs.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Tracker mis à jour avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "404", description = "Tracker non trouvé"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @PutMapping("/update-tracker/{id}")
     public ResponseEntity<Object> updateTracker(@PathVariable Long id, @RequestBody Utilisateur utilisateurDetails, HttpServletRequest request) {
         try {
@@ -272,6 +342,14 @@ public class UtilisateurController {
         }
     }
 
+    @Operation(summary = "Mettre à jour un Tuteur",
+            description = "Met à jour les informations d'un tuteur. Accessible au tuteur lui-même, aux administrateurs et aux trackers.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Tuteur mis à jour avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "404", description = "Tuteur non trouvé"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @PutMapping("/update-tuteur/{id}")
     public ResponseEntity<Object> updateTuteur(@PathVariable Long id, @RequestBody Utilisateur utilisateurDetails, HttpServletRequest request) {
         try {
@@ -301,6 +379,14 @@ public class UtilisateurController {
         }
     }
 
+    @Operation(summary = "Supprimer un utilisateur",
+            description = "Supprime un utilisateur par ID. Accessible aux administrateurs, les trackers peuvent supprimer uniquement des tuteurs et ne peuvent pas supprimer leur propre compte.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Utilisateur supprimé avec succès"),
+                    @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
+                    @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
+                    @ApiResponse(responseCode = "400", description = "Requête invalide")
+            })
     @DeleteMapping("/detete-user/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable Long id, HttpServletRequest request) {
         try {

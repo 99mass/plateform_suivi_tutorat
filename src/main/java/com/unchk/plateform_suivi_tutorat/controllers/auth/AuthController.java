@@ -3,6 +3,8 @@ package com.unchk.plateform_suivi_tutorat.controllers.auth;
 import com.unchk.plateform_suivi_tutorat.models.Utilisateur;
 import com.unchk.plateform_suivi_tutorat.services.JwtService;
 import com.unchk.plateform_suivi_tutorat.services.UtilisateurService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +30,12 @@ public class AuthController {
         this.utilisateurService = utilisateurService;
     }
 
+    @Operation(summary = "Authentifier un utilisateur",
+            description = "Authentifie un utilisateur avec son email et mot de passe, et retourne un token JWT.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Authentification réussie, token JWT retourné"),
+                    @ApiResponse(responseCode = "401", description = "Email ou mot de passe incorrect")
+            })
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
@@ -57,7 +65,12 @@ public class AuthController {
         }
     }
 
-
+    @Operation(summary = "Vérifier si un utilisateur existe",
+            description = "Vérifie si un utilisateur avec l'email spécifié existe.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Utilisateur trouvé"),
+                    @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé")
+            })
     @GetMapping("/check-user")
     public ResponseEntity<?> checkIfUserExists(@RequestParam String email) {
         Optional<Utilisateur> utilisateurOpt = utilisateurService.getUserByEmail(email);
