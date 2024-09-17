@@ -97,7 +97,6 @@ public class JwtService {
         throw new RuntimeException("Token invalide ou manquant");
     }
 
-
     public String extractUsernameFromToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         String jwt = null;
@@ -113,5 +112,13 @@ public class JwtService {
         throw new RuntimeException("Token invalide ou manquant");
     }
 
+    public Boolean isTokenValid(String token) {
+        try {
+            // Vérifie si le token n'est pas expiré
+            return !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 }
