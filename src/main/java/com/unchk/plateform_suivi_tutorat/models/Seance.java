@@ -35,4 +35,7 @@ public class Seance {
     @ManyToOne
     @JoinColumn(name = "groupe_id")
     private Groupe groupe;
+
+    
+
 }

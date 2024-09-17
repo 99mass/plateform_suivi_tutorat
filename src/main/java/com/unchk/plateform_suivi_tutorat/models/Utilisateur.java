@@ -11,9 +11,7 @@ import java.util.Collections;
 
 @Data
 @Entity
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Inheritance(strategy = InheritanceType.JOINED)
-//@DiscriminatorColumn(name = "role")
 @Table(name = "Utilisateur")
 public class Utilisateur implements UserDetails {
 
