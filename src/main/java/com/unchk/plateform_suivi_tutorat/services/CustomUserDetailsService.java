@@ -1,6 +1,5 @@
 package com.unchk.plateform_suivi_tutorat.services;
 
-import com.unchk.plateform_suivi_tutorat.models.Utilisateur;
 import com.unchk.plateform_suivi_tutorat.repositories.UtilisateurRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

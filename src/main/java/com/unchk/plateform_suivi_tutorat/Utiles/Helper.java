@@ -1,4 +1,6 @@
 package com.unchk.plateform_suivi_tutorat.Utiles;
+
+import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 public class Helper {
@@ -17,6 +19,11 @@ public class Helper {
 
     public boolean isValidPassword(String motDePasse) {
         return motDePasse != null && motDePasse.length() >= MIN_PASSWORD_LENGTH;
+    }
+
+    public boolean isValidDate(LocalDateTime date) {
+        // Exemple de validation simple : vérifier si la date n'est pas dans le passé
+        return date.isAfter(LocalDateTime.now());
     }
 
 }
