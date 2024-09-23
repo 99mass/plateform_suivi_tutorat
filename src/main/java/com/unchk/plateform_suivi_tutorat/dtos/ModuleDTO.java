@@ -21,6 +21,4 @@ public class ModuleDTO {
     public void setId(Long id) { this.id = id; }
     public String getNom() { return nom; }
     public void setNom(String nom) { this.nom = nom; }
-    public int getNombreSemaines() { return nombreSemaines; }
-    public void setNombreSemaines(int nombreSemaines) { this.nombreSemaines = nombreSemaines; }
 }

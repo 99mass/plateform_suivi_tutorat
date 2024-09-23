@@ -72,6 +72,23 @@ public class SeanceController {
         }
     }
 
+    @Operation(summary = "Récupérer toutes les séances d'un tuteur", description = "Retourne une liste de toutes les séances associées à un tuteur donné.", responses = {
+            @ApiResponse(responseCode = "200", description = "Liste des séances récupérée avec succès"),
+            @ApiResponse(responseCode = "404", description = "Tuteur non trouvé"),
+            @ApiResponse(responseCode = "400", description = "Requête invalide")
+    })
+    @GetMapping("/tuteur/{tuteurId}")
+    public ResponseEntity<Object> getSeancesByTuteurId(@PathVariable Long tuteurId) {
+        try {
+            List<SeanceDTO> seances = seanceService.getSeancesByTuteurId(tuteurId);
+            return ResponseEntity.ok(seances);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+
     @Operation(summary = "Créer une nouvelle séance", description = "Crée une nouvelle séance. Accessible uniquement aux administrateurs et trackers.", responses = {
             @ApiResponse(responseCode = "201", description = "Séance créée avec succès"),
             @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),

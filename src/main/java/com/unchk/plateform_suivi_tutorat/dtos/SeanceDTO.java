@@ -34,11 +34,8 @@ public class SeanceDTO {
     public void setId(Long id) { this.id = id; }
     public LocalDateTime getDate() { return date; }
     public void setDate(LocalDateTime date) { this.date = date; }
-    public boolean isEffectuee() { return effectuee; }
     public void setEffectuee(boolean effectuee) { this.effectuee = effectuee; }
-    public int getHeuresEffectuees() { return heuresEffectuees; }
     public void setHeuresEffectuees(int heuresEffectuees) { this.heuresEffectuees = heuresEffectuees; }
-    public int getHeuresNonEffectuees() { return heuresNonEffectuees; }
     public void setHeuresNonEffectuees(int heuresNonEffectuees) { this.heuresNonEffectuees = heuresNonEffectuees; }
     public TuteurDTO getTuteur() { return tuteur; }
     public void setTuteur(TuteurDTO tuteur) { this.tuteur = tuteur; }
@@ -46,7 +43,6 @@ public class SeanceDTO {
     public void setModule(ModuleDTO module) { this.module = module; }
     public GroupeDTO getGroupe() { return groupe; }
     public void setGroupe(GroupeDTO groupe) { this.groupe = groupe; }
-    public List<String> getDates() { return dates; }
     public void setDates(List<String> dates) { this.dates = dates; }
 }
 

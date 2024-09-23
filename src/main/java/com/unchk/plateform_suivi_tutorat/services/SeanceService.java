@@ -62,6 +62,19 @@ public class SeanceService {
         return convertToSeanceDTO(seance); // Conversion de la séance
     }
 
+//    Récupérer les séances par l'ID du tuteur
+    public List<SeanceDTO> getSeancesByTuteurId(Long tuteurId) {
+        if (!tuteurRepository.existsById(tuteurId)) {
+            throw new RuntimeException(ERROR_TUTEUR_NOT_FOUND);
+        }
+
+        List<Seance> seances = seanceRepository.findByTuteurId(tuteurId);
+        return seances.stream()
+                .map(this::convertToSeanceDTO)
+                .collect(Collectors.toList());
+    }
+
+
     // Créer une nouvelle séance
     public SeanceDTO createSeance(Long tuteurId, Long moduleId, Long groupeId) {
         // Validation des champs

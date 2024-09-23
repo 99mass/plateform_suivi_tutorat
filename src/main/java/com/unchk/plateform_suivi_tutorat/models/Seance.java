@@ -94,22 +94,6 @@ public class Seance {
         return date;
     }
 
-    public Boolean getEffectuee() {
-        return effectuee;
-    }
-
-    public void setEffectuee(Boolean effectuee) {
-        this.effectuee = effectuee;
-    }
-
-    public void setHeuresEffectuees(Integer heuresEffectuees) {
-        this.heuresEffectuees = heuresEffectuees;
-    }
-
-    public void setHeuresNonEffectuees(Integer heuresNonEffectuees) {
-        this.heuresNonEffectuees = heuresNonEffectuees;
-    }
-
     public Tuteur getTuteur() {
         return tuteur;
     }
@@ -142,11 +126,7 @@ public class Seance {
         return dates;
     }
 
-    public void setDates(List<String> dates) {
-        this.dates = dates;
-    }
-
-    // Ajoutez une méthode pour ajouter une date
+    // méthode pour ajouter une date
     public void addDate(String date) {
         this.dates.add(date);
     }

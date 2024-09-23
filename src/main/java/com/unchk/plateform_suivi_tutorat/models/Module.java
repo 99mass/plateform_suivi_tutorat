@@ -22,11 +22,6 @@ public class Module {
     @Column(nullable = false)
     @Min(value = 1, message = "Le nombre de semaines doit être supérieur ou égal à 1")
     private Integer nombreSemaines;
-//
-//    @ManyToMany(mappedBy = "modules")
-//    @JsonIgnore
-//    private Set<Tuteur> tuteurs = new HashSet<>();
-
 
     public Long getId() {
         return id;

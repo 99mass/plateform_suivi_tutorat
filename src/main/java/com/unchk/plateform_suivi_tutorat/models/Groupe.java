@@ -1,12 +1,7 @@
 // Groupe.java
 package com.unchk.plateform_suivi_tutorat.models;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Entity
