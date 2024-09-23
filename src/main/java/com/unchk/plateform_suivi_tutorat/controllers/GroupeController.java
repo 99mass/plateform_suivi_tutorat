@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static com.unchk.plateform_suivi_tutorat.services.GroupeService.ERROR_MODULE_ASSOCIATED;
+
 @RestController
 @RequestMapping("/api/groupes")
 public class GroupeController {
@@ -24,6 +26,7 @@ public class GroupeController {
     public static final String USER_ROLE_TRACKER = Utilisateur.Role.tracker.name();
     public static final String USER_ROLE_TUTEUR = Utilisateur.Role.tuteur.name();
     public static final String USER_FORBIDDEN_MESSAGE = "Vous n'avez pas les droits pour accéder à cette ressource";
+    public static final String ERROR_NOT_KNOWN = "Une erreur a été détectée, veuillez revoir les informations fournies";
 
 
     private final GroupeService groupeService;
@@ -75,6 +78,7 @@ public class GroupeController {
             String role = jwtService.extractRoleFromToken(request);
 
             if (USER_ROLE_ADMIN.equals(role) || USER_ROLE_TRACKER.equals(role)) {
+
                 Groupe createdGroupe = groupeService.createGroupe(groupe);
                 return new ResponseEntity<>(createdGroupe, HttpStatus.CREATED);
             } else {
@@ -82,8 +86,10 @@ public class GroupeController {
                         .body(new ErrorResponse(USER_FORBIDDEN_MESSAGE));
             }
         } catch (RuntimeException e) {
+
+            System.out.println("ErrorMessage: "+e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse(e.getMessage()));
+                    .body(new ErrorResponse(ERROR_NOT_KNOWN));
         }
     }
 
@@ -109,8 +115,9 @@ public class GroupeController {
                         .body(new ErrorResponse(USER_FORBIDDEN_MESSAGE));
             }
         } catch (RuntimeException e) {
+            System.out.println("ErrorMessage: "+e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse(e.getMessage()));
+                    .body(new ErrorResponse(ERROR_NOT_KNOWN));
         }
     }
 
@@ -136,8 +143,9 @@ public class GroupeController {
                         .body(new ErrorResponse(USER_FORBIDDEN_MESSAGE));
             }
         } catch (RuntimeException e) {
+            System.out.println("ErrorMessage: "+e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse(e.getMessage()));
+                    .body(new ErrorResponse(ERROR_NOT_KNOWN));
         }
     }
 }

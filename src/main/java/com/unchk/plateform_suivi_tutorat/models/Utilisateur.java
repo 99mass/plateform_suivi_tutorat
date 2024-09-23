@@ -140,6 +140,9 @@ public class Utilisateur implements UserDetails {
     public Role getRole() {
         return role;
     }
+    public String getRoleName() {
+        return role.name();
+    }
 
     public void setRole(Role role) {
         this.role = role;

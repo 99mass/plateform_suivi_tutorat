@@ -1,5 +1,7 @@
 // Groupe.java
 package com.unchk.plateform_suivi_tutorat.models;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,10 +22,6 @@ public class Groupe {
     @ManyToOne
     @JoinColumn(name = "module_id")
     private Module module;
-
-    @ManyToMany(mappedBy = "groupes")
-    @JsonManagedReference
-    private Set<Tuteur> tuteurs = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -47,13 +45,5 @@ public class Groupe {
 
     public void setModule(Module module) {
         this.module = module;
-    }
-
-    public Set<Tuteur> getTuteurs() {
-        return tuteurs;
-    }
-
-    public void setTuteurs(Set<Tuteur> tuteurs) {
-        this.tuteurs = tuteurs;
     }
 }

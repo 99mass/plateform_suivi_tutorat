@@ -1,5 +1,6 @@
 // Module.java
 package com.unchk.plateform_suivi_tutorat.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -21,6 +22,11 @@ public class Module {
     @Column(nullable = false)
     @Min(value = 1, message = "Le nombre de semaines doit être supérieur ou égal à 1")
     private Integer nombreSemaines;
+//
+//    @ManyToMany(mappedBy = "modules")
+//    @JsonIgnore
+//    private Set<Tuteur> tuteurs = new HashSet<>();
+
 
     public Long getId() {
         return id;
@@ -46,16 +52,6 @@ public class Module {
         this.nombreSemaines = nombreSemaines;
     }
 
-    public Set<Tuteur> getTuteurs() {
-        return tuteurs;
-    }
 
-    public void setTuteurs(Set<Tuteur> tuteurs) {
-        this.tuteurs = tuteurs;
-    }
-
-    @ManyToMany(mappedBy = "modules")
-    @JsonManagedReference
-    private Set<Tuteur> tuteurs = new HashSet<>();
 }
 

@@ -1,8 +1,10 @@
 package com.unchk.plateform_suivi_tutorat.services;
 
 import com.unchk.plateform_suivi_tutorat.models.Groupe;
+import com.unchk.plateform_suivi_tutorat.models.Module;
 import com.unchk.plateform_suivi_tutorat.repositories.GroupeRepository;
 import com.unchk.plateform_suivi_tutorat.repositories.ModuleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.unchk.plateform_suivi_tutorat.services.TuteurService.MODULE_NOT_FOUND;
+
 @Service
 public class GroupeService {
 
@@ -21,7 +25,7 @@ public class GroupeService {
     public static final String ERROR_FOUND="Un groupe avec ce nom existe déjà";
     public static final String ERROR_MODULE_ASSOCIATED="Le module associé n'existe pas";
     public static final String ERROR_GROUP_NOT_EMPTY="Le nom du groupe ne peut pas etre vide.";
-
+    public static  final  String ERROR_GROUP_UPDATE_NOT_NECCESSAIR="Les Informations sont vides";
 
     @Autowired
     private final GroupeRepository groupeRepository;
@@ -49,15 +53,21 @@ public class GroupeService {
 
     public Groupe createGroupe(Groupe groupe) {
 
-        if (groupe.getNom().isEmpty()){
-            throw new RuntimeException(ERROR_GROUP_NOT_EMPTY);
-        }
-
         // Vérifier si le module associé existe
-        if (groupe.getModule() != null && !moduleRepository.existsById(groupe.getModule().getId())) {
+        if (groupe.getModule() != null){
+            if (groupe.getModule().getId() ==null){
+                throw new RuntimeException(ERROR_MODULE_ASSOCIATED);
+            }
+            Module module = moduleRepository.findById(groupe.getModule().getId())
+                    .orElseThrow(() -> new EntityNotFoundException(ERROR_MODULE_ASSOCIATED));
+        }else {
             throw new RuntimeException(ERROR_MODULE_ASSOCIATED);
         }
 
+        if (groupe.getNom().isEmpty()){
+            throw new RuntimeException(ERROR_GROUP_NOT_EMPTY);
+        }
+        
         validateGroupe(groupe);
         if (groupeRepository.existsByNom(groupe.getNom())) {
             throw new RuntimeException(ERROR_FOUND);
@@ -68,6 +78,10 @@ public class GroupeService {
     public Groupe updateGroupe(Long id, Groupe groupeDetails) {
         return groupeRepository.findById(id).map(groupe -> {
             if (groupeDetails.getNom() != null) {
+
+                if (groupeDetails.getNom().isEmpty()){
+                    throw new RuntimeException(ERROR_GROUP_NOT_EMPTY);
+                }
                 if (groupeRepository.existsByNom(groupeDetails.getNom()) && !groupeDetails.getNom().equals(groupe.getNom())) {
                     throw new RuntimeException(ERROR_FOUND);
                 }
@@ -80,6 +94,10 @@ public class GroupeService {
                 }
 
                 groupe.setModule(groupeDetails.getModule());
+            }
+
+            if (groupeDetails.getNom() == null && groupeDetails.getModule() == null) {
+                throw new RuntimeException(ERROR_GROUP_UPDATE_NOT_NECCESSAIR);
             }
 
             return groupeRepository.save(groupe);

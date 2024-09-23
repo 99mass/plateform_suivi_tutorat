@@ -14,7 +14,7 @@ public class Tuteur extends Utilisateur {
             joinColumns = @JoinColumn(name = "tuteur_id"),
             inverseJoinColumns = @JoinColumn(name = "module_id")
     )
-    @JsonManagedReference
+//    @JsonManagedReference
     private Set<Module> modules = new HashSet<>();
 
     @ManyToMany

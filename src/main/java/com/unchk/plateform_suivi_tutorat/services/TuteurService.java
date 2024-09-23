@@ -44,7 +44,7 @@ public class TuteurService {
                 .collect(Collectors.toSet());
 
         Set<GroupeDTO> groupeDTOs = tuteur.getGroupes().stream()
-                .map(groupe -> new GroupeDTO(groupe.getId(), groupe.getNom()))
+                .map(groupe -> new GroupeDTO(groupe.getId(), groupe.getNom(),null))
                 .collect(Collectors.toSet());
 
         return new TuteurDTO(
@@ -144,7 +144,7 @@ public class TuteurService {
     public TuteurWithGroupesDTO getAllGroupesForTuteur(Long tuteurId) {
         Tuteur tuteur = getTuteurById(tuteurId);
         Set<GroupeDTO> groupeDTOs = tuteur.getGroupes().stream()
-                .map(groupe -> new GroupeDTO(groupe.getId(), groupe.getNom()))
+                .map(groupe -> new GroupeDTO(groupe.getId(), groupe.getNom(),null))
                 .collect(Collectors.toSet());
 
         return new TuteurWithGroupesDTO(
@@ -202,7 +202,8 @@ public class TuteurService {
                         null,
                         null
                 ),
-                new GroupeDTO(groupe.getId(), groupe.getNom())
+                new GroupeDTO(groupe.getId(), groupe.getNom(),null
+                )
         );
     }
 

@@ -1,6 +1,7 @@
 package com.unchk.plateform_suivi_tutorat.controllers;
 
 import com.unchk.plateform_suivi_tutorat.Utiles.ErrorResponse;
+import com.unchk.plateform_suivi_tutorat.dtos.SeanceDTO;
 import com.unchk.plateform_suivi_tutorat.models.Seance;
 import com.unchk.plateform_suivi_tutorat.models.Utilisateur;
 import com.unchk.plateform_suivi_tutorat.services.JwtService;
@@ -42,7 +43,7 @@ public class SeanceController {
             // String role = jwtService.extractRoleFromToken(request);
 
             // if (USER_ROLE_ADMIN.equals(role) || USER_ROLE_TRACKER.equals(role)) {
-                List<Seance> seances = seanceService.getAllSeances();
+                List<SeanceDTO> seances = seanceService.getAllSeances();
                 return ResponseEntity.ok(seances);
             // } else {
             //     return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -62,15 +63,9 @@ public class SeanceController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getSeanceById(@PathVariable Long id, HttpServletRequest request) {
         try {
-            // String role = jwtService.extractRoleFromToken(request);
-
-            // if (USER_ROLE_ADMIN.equals(role) || USER_ROLE_TRACKER.equals(role)) {
-                Seance seance = seanceService.getSeanceById(id);
+                SeanceDTO seance = seanceService.getSeanceById(id);
                 return ResponseEntity.ok(seance);
-            // } else {
-            //     return ResponseEntity.status(HttpStatus.FORBIDDEN)
-            //             .body(new ErrorResponse(USER_FORBIDDEN_MESSAGE));
-            // }
+
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponse(e.getMessage()));
@@ -91,7 +86,7 @@ public class SeanceController {
             String role = jwtService.extractRoleFromToken(request);
 
             if (USER_ROLE_ADMIN.equals(role) || USER_ROLE_TRACKER.equals(role)) {
-                Seance createdSeance = seanceService.createSeance(tuteurId, moduleId, groupeId);
+                SeanceDTO createdSeance = seanceService.createSeance(tuteurId, moduleId, groupeId);
                 return ResponseEntity.status(HttpStatus.CREATED).body(createdSeance);
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -115,7 +110,7 @@ public class SeanceController {
             String role = jwtService.extractRoleFromToken(request);
 
             if (USER_ROLE_ADMIN.equals(role) || USER_ROLE_TRACKER.equals(role)) {
-                Seance updatedSeance = seanceService.updateSeanceStatus(id, effectuee);
+                SeanceDTO updatedSeance = seanceService.updateSeanceStatus(id, effectuee);
                 return ResponseEntity.ok(updatedSeance);
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)

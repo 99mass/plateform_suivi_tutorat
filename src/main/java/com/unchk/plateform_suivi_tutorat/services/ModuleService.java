@@ -17,6 +17,11 @@ public class ModuleService {
 
     public static final String ERROR_NOT_FOUND="Module non trouvé";
     private static final String ERROR_FOUND="Un module avec ce nom existe déjà";
+    private static final String ERROR_FOUND_2="Une des informations n'est pas correct";
+    private static final String ERROR_NOT_EMPTY="Un module ne peut pas etre vide";
+    private static final String ERROR_EMPTY_CHAMPS="Au moins une des informations doit etre modifier";
+    private static final String ERROR_Type="Le nombre de semaine ne peut etre inférieur a 0";
+
 
     @Autowired
     private final ModuleRepository moduleRepository;
@@ -39,9 +44,16 @@ public class ModuleService {
     }
 
     public Module createModule(Module module) {
+
+        if (module.getNom().isEmpty()){
+            throw new RuntimeException(ERROR_NOT_EMPTY);
+        }
         validateModule(module);
-        if (moduleRepository.existsByNom(module.getNom())) {
+        if ( moduleRepository.existsByNom(module.getNom())) {
             throw new RuntimeException(ERROR_FOUND);
+        }
+        if (module.getNombreSemaines()<0){
+            throw new RuntimeException(ERROR_Type);
         }
         return moduleRepository.save(module);
     }
@@ -54,8 +66,16 @@ public class ModuleService {
                 }
                 module.setNom(moduleDetails.getNom());
             }
+
             if (moduleDetails.getNombreSemaines() != null) {
+                if (moduleDetails.getNombreSemaines()<0){
+                    throw new RuntimeException(ERROR_Type);
+                }
                 module.setNombreSemaines(moduleDetails.getNombreSemaines());
+            }
+
+            if (moduleDetails.getNom() == null && moduleDetails.getNombreSemaines() == null){
+                throw new RuntimeException(ERROR_EMPTY_CHAMPS);
             }
 
             return moduleRepository.save(module);
