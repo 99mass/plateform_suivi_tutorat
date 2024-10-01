@@ -26,6 +26,11 @@ public class Tuteur extends Utilisateur {
     @JsonManagedReference
     private Set<Groupe> groupes = new HashSet<>();
 
+      // Relation avec Seance
+      @OneToMany(mappedBy = "tuteur", cascade = CascadeType.ALL, orphanRemoval = true)
+      @JsonManagedReference 
+      private Set<Seance> seances = new HashSet<>();
+
     // Constructors
     public Tuteur() {
         super();
@@ -48,6 +53,14 @@ public class Tuteur extends Utilisateur {
         this.groupes = groupes;
     }
 
+    public Set<Seance> getSeances() {
+        return seances;
+    }
+
+    public void setSeances(Set<Seance> seances) {
+        this.seances = seances;
+    }
+
     // Optional: Add methods to manage the modules and groupes relationships
     public void addModule(Module module) {
         this.modules.add(module);
@@ -63,5 +76,16 @@ public class Tuteur extends Utilisateur {
 
     public void removeGroupe(Groupe groupe) {
         this.groupes.remove(groupe);
+    }
+
+
+    public void addSeance(Seance seance) {
+        this.seances.add(seance);
+        seance.setTuteur(this); 
+    }
+
+    public void removeSeance(Seance seance) {
+        this.seances.remove(seance);
+        seance.setTuteur(null); 
     }
 }

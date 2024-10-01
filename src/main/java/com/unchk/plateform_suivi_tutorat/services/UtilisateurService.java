@@ -22,6 +22,7 @@ public class UtilisateurService {
     public static final String EMPTY_MESSAGE = "Toutes les informations doivent être fournies";
     public static final String USER_DELETE_ERROR_MESSAGE = "Erreur lors de la suppression de l'utilisateur";
     public static final String USER_EXIST_MESSAGE = "Un utilisateur avec cet email existe déjà";
+    public static final String ROLE_UPDATE_FORBIDDEN = "Modification du rôle non autorisée";
 
     @Autowired
     private UtilisateurRepository utilisateurRepository;
@@ -69,7 +70,7 @@ public class UtilisateurService {
             tuteur.setEmail(utilisateur.getEmail());
             tuteur.setTelephone(utilisateur.getTelephone());
             tuteur.setMotDePasse(utilisateur.getMotDePasse());
-            tuteur.setRole(Utilisateur.Role.tuteur);  // Définir le rôle du tuteur
+            tuteur.setRole(Utilisateur.Role.tuteur); // Définir le rôle du tuteur
 
             return tuteurRepository.save(tuteur);
         }
@@ -78,7 +79,8 @@ public class UtilisateurService {
         return utilisateurRepository.save(utilisateur);
     }
 
-    public Utilisateur updateUser(Long id, Utilisateur utilisateurDetails) {
+    public Utilisateur updateUser(Long id, Utilisateur utilisateurDetails, boolean isAdmin, String oldPassword,
+            String newPassword) {
         Helper helper = new Helper();
 
         return utilisateurRepository.findById(id).map(user -> {
@@ -98,17 +100,22 @@ public class UtilisateurService {
                 if (!helper.isValidTelephone(utilisateurDetails.getTelephone())) {
                     throw new RuntimeException(INVALID_TELEPHONE_MESSAGE);
                 }
-                
                 user.setTelephone(utilisateurDetails.getTelephone());
             }
-            if (utilisateurDetails.getMotDePasse() != null && !utilisateurDetails.getMotDePasse().isEmpty()) {
-                if (!helper.isValidPassword(utilisateurDetails.getMotDePasse())) {
+            if (utilisateurDetails.getRole() != null && !utilisateurDetails.getRole().equals(user.getRole())) {
+                if (!isAdmin) {
+                    throw new RuntimeException(ROLE_UPDATE_FORBIDDEN);
+                }
+                user.setRole(utilisateurDetails.getRole());
+            }
+            if (oldPassword != null && newPassword != null && !oldPassword.isEmpty() && !newPassword.isEmpty()) {
+                if (!passwordEncoder.matches(oldPassword, user.getMotDePasse())) {
+                    throw new RuntimeException("Ancien mot de passe incorrect");
+                }
+                if (!helper.isValidPassword(newPassword)) {
                     throw new RuntimeException(INVALID_PASSWORD_MESSAGE);
                 }
-                user.setMotDePasse(passwordEncoder.encode(utilisateurDetails.getMotDePasse()));
-            }
-            if (utilisateurDetails.getRole() != null) {
-                user.setRole(utilisateurDetails.getRole());
+                user.setMotDePasse(passwordEncoder.encode(newPassword));
             }
 
             return utilisateurRepository.save(user);

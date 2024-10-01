@@ -82,17 +82,37 @@ public class AuthController {
         }
     }
 
-    @Operation(summary = "Vérifier la validité du token", description = "Vérifie si le token JWT est valide.", responses = {
-            @ApiResponse(responseCode = "200", description = "Token valide"),
+    @Operation(summary = "Vérifier la validité du token", description = "Vérifie si le token JWT est valide et retourne les informations de l'utilisateur.", responses = {
+            @ApiResponse(responseCode = "200", description = "Token valide, informations utilisateur retournées"),
             @ApiResponse(responseCode = "401", description = "Token invalide ou expiré")
     })
     @GetMapping("/validate-token")
     public ResponseEntity<?> validateToken(@RequestParam String token) {
-        boolean isValid = jwtService.isTokenValid(token);
-        if (isValid) {
-            return ResponseEntity.ok(Map.of("message", "Token valide"));
+        if (jwtService.isTokenValid(token)) {
+            String email = jwtService.extractUsername(token); // extraire l'email de l'utilisateur depuis le token
+            Optional<Utilisateur> utilisateurOpt = utilisateurService.getUserByEmail(email);
+
+            if (utilisateurOpt.isPresent()) {
+                Utilisateur utilisateur = utilisateurOpt.get();
+
+                // Créer une réponse avec les informations de l'utilisateur
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "Token valide");
+                response.put("token", token);
+                response.put("id", utilisateur.getId());
+                response.put("nom", utilisateur.getNom());
+                response.put("prenom", utilisateur.getPrenom());
+                response.put("email", utilisateur.getEmail());
+                response.put("telephone", utilisateur.getTelephone());
+                response.put("role", utilisateur.getRole());
+
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Utilisateur non trouvé"));
+            }
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Token invalide ou expiré"));
         }
     }
+
 }

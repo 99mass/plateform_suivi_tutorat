@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Data
 @Entity
 @Table(name = "Seance")
@@ -28,6 +30,7 @@ public class Seance {
 
     @ManyToOne
     @JoinColumn(name = "tuteur_id", nullable = false)
+    @JsonBackReference 
     private Tuteur tuteur;
 
     @ManyToOne
