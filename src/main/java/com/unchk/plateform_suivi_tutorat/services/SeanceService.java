@@ -26,11 +26,10 @@ public class SeanceService {
     public static final String SEANCE_DELETE_ERROR_MESSAGE = "Erreur lors de la suppression de la séance";
     public static final String EMPTY_MESSAGE = "Toutes les informations doivent être fournies";
     public static final String MAX_WEEKS_REACHED_MESSAGE = "Le nombre de semaines du module est déjà atteint";
-    public  static final String ERROR_EXISTING_SEANCE = "Une séance avec ce tuteur, module et groupe existe déjà";
-    public  static final String ERROR_TUTEUR_NOT_FOUND = "Tuteur non trouvé";
-    public  static final String ERROR_MODULE_NOT_FOUND = "Module non trouvé";
-    public  static final String ERROR_GROUPE_NOT_FOUND = "Groupe non trouvé";
-
+    public static final String ERROR_EXISTING_SEANCE = "Une séance avec ce tuteur, module et groupe existe déjà";
+    public static final String ERROR_TUTEUR_NOT_FOUND = "Tuteur non trouvé";
+    public static final String ERROR_MODULE_NOT_FOUND = "Module non trouvé";
+    public static final String ERROR_GROUPE_NOT_FOUND = "Groupe non trouvé";
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -54,7 +53,6 @@ public class SeanceService {
                 .collect(Collectors.toList());
     }
 
-
     // Récupérer une séance par ID
     public SeanceDTO getSeanceById(Long id) {
         Seance seance = seanceRepository.findById(id)
@@ -62,7 +60,7 @@ public class SeanceService {
         return convertToSeanceDTO(seance); // Conversion de la séance
     }
 
-//    Récupérer les séances par l'ID du tuteur
+    // Récupérer les séances par l'ID du tuteur
     public List<SeanceDTO> getSeancesByTuteurId(Long tuteurId) {
         if (!tuteurRepository.existsById(tuteurId)) {
             throw new RuntimeException(ERROR_TUTEUR_NOT_FOUND);
@@ -74,7 +72,6 @@ public class SeanceService {
                 .collect(Collectors.toList());
     }
 
-
     // Créer une nouvelle séance
     public SeanceDTO createSeance(Long tuteurId, Long moduleId, Long groupeId) {
         // Validation des champs
@@ -82,7 +79,8 @@ public class SeanceService {
             throw new RuntimeException(EMPTY_MESSAGE);
         }
 
-        // Vérifier si une séance existe déjà avec le même tuteurId, moduleId, et groupeId
+        // Vérifier si une séance existe déjà avec le même tuteurId, moduleId, et
+        // groupeId
         if (seanceRepository.existsByTuteurIdAndModuleIdAndGroupeId(tuteurId, moduleId, groupeId)) {
             throw new RuntimeException(ERROR_EXISTING_SEANCE);
         }
@@ -115,6 +113,55 @@ public class SeanceService {
         return convertToSeanceDTO(savedSeance); // Retourne le DTO
     }
 
+    // Mettre à jour toutes les informations d'une séance
+    public SeanceDTO updateSeanceDetails(Long id, Long tuteurId, Long moduleId, Long groupeId, LocalDateTime date,
+            int heuresEffectuees, int heuresNonEffectuees, boolean effectuee) {
+        return seanceRepository.findById(id).map(seance -> {
+
+            // if (seanceRepository.existsByTuteurIdAndModuleIdAndGroupeId(tuteurId, moduleId, groupeId)) {
+            //     throw new RuntimeException(ERROR_EXISTING_SEANCE);
+            // }
+
+            // Vérifier si le tuteur, le module, et le groupe existent
+            if (!tuteurRepository.existsById(tuteurId)) {
+                throw new RuntimeException(ERROR_TUTEUR_NOT_FOUND);
+            }
+
+            if (!moduleRepository.existsById(moduleId)) {
+                throw new RuntimeException(ERROR_MODULE_NOT_FOUND);
+            }
+
+            if (!groupeRepository.existsById(groupeId)) {
+                throw new RuntimeException(ERROR_GROUPE_NOT_FOUND);
+            }
+
+            // Vérifier que les heures ne dépassent pas la limite
+            Module module = moduleRepository.findById(moduleId)
+                    .orElseThrow(() -> new RuntimeException(ERROR_MODULE_NOT_FOUND));
+
+            int totalHeures = heuresEffectuees + heuresNonEffectuees;
+            if (totalHeures > module.getNombreSemaines() * 2) {
+                throw new RuntimeException(MAX_WEEKS_REACHED_MESSAGE);
+            }
+
+            if (date == null) {
+                throw new RuntimeException("la date est requise");
+            }
+
+            // Mise à jour des informations de la séance
+            seance.setTuteur(tuteurRepository.findById(tuteurId).get());
+            seance.setModule(moduleRepository.findById(moduleId).get());
+            seance.setGroupe(groupeRepository.findById(groupeId).get());
+            seance.setDate(date);
+            seance.setHeuresEffectuees(heuresEffectuees);
+            seance.setHeuresNonEffectuees(heuresNonEffectuees);
+            seance.setEffectuee(effectuee);
+
+            // Sauvegarder et retourner le DTO
+            return convertToSeanceDTO(seanceRepository.save(seance));
+        }).orElseThrow(() -> new RuntimeException(SEANCE_NOT_FOUND_MESSAGE));
+    }
+
     // Mettre à jour l'état de la séance (effectuée ou non) et gérer les dates
     public SeanceDTO updateSeanceStatus(Long id, boolean effectuee) {
         return seanceRepository.findById(id).map(seance -> {
@@ -127,9 +174,9 @@ public class SeanceService {
             }
 
             if (effectuee) {
-                seance.setHeuresEffectuees(seance.getHeuresEffectuees()+2);
+                seance.setHeuresEffectuees(seance.getHeuresEffectuees() + 2);
             } else {
-                seance.setHeuresNonEffectuees(seance.getHeuresNonEffectuees()+2);
+                seance.setHeuresNonEffectuees(seance.getHeuresNonEffectuees() + 2);
             }
 
             seance.setEffectuee(effectuee);
@@ -170,9 +217,9 @@ public class SeanceService {
                 .collect(Collectors.toSet()));
         tuteurDTO.setGroupes(seance.getTuteur().getGroupes().stream()
                 .map(groupe -> new GroupeDTO(groupe.getId(), groupe.getNom(),
-                        new ModuleDTO(groupe.getModule().getId(), groupe.getModule().getNom(), groupe.getModule().getNombreSemaines())))
+                        new ModuleDTO(groupe.getModule().getId(), groupe.getModule().getNom(),
+                                groupe.getModule().getNombreSemaines())))
                 .collect(Collectors.toSet()));
-
 
         SeanceDTO seanceDTO = new SeanceDTO();
         seanceDTO.setId(seance.getId());
@@ -181,16 +228,15 @@ public class SeanceService {
         seanceDTO.setHeuresEffectuees(seance.getHeuresEffectuees());
         seanceDTO.setHeuresNonEffectuees(seance.getHeuresNonEffectuees());
         seanceDTO.setTuteur(tuteurDTO);
-        seanceDTO.setModule(new ModuleDTO(seance.getModule().getId(), seance.getModule().getNom(), seance.getModule().getNombreSemaines()));
+        seanceDTO.setModule(new ModuleDTO(seance.getModule().getId(), seance.getModule().getNom(),
+                seance.getModule().getNombreSemaines()));
         seanceDTO.setGroupe(new GroupeDTO(
                 seance.getGroupe().getId(),
                 seance.getGroupe().getNom(),
                 new ModuleDTO(
                         seance.getGroupe().getModule().getId(),
                         seance.getGroupe().getModule().getNom(),
-                        seance.getGroupe().getModule().getNombreSemaines()
-                )
-        ));
+                        seance.getGroupe().getModule().getNombreSemaines())));
 
         seanceDTO.setDates(seance.getDates());
 

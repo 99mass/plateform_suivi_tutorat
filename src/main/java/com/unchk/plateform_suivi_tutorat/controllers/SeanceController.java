@@ -62,8 +62,8 @@ public class SeanceController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getSeanceById(@PathVariable Long id, HttpServletRequest request) {
         try {
-                SeanceDTO seance = seanceService.getSeanceById(id);
-                return ResponseEntity.ok(seance);
+            SeanceDTO seance = seanceService.getSeanceById(id);
+            return ResponseEntity.ok(seance);
 
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -86,7 +86,6 @@ public class SeanceController {
                     .body(new ErrorResponse(e.getMessage()));
         }
     }
-
 
     @Operation(summary = "Créer une nouvelle séance", description = "Crée une nouvelle séance. Accessible uniquement aux administrateurs et trackers.", responses = {
             @ApiResponse(responseCode = "201", description = "Séance créée avec succès"),
@@ -114,19 +113,30 @@ public class SeanceController {
         }
     }
 
-    @Operation(summary = "Mettre à jour l'état d'une séance", description = "Met à jour l'état d'une séance (effectuée ou non). Accessible uniquement aux administrateurs et trackers.", responses = {
+    @Operation(summary = "Mettre à jour les informations d'une séance", description = "Met à jour les informations d'une séance telles que le tuteur, le module, le groupe, la date, les heures effectuées/non effectuées, et l'état (effectuée ou non). Accessible uniquement aux administrateurs et trackers.", responses = {
             @ApiResponse(responseCode = "200", description = "Séance mise à jour avec succès"),
+            @ApiResponse(responseCode = "400", description = "Erreur dans les paramètres fournis ou limite de séances atteinte"),
             @ApiResponse(responseCode = "403", description = "Accès interdit : l'utilisateur n'a pas les droits nécessaires"),
-            @ApiResponse(responseCode = "404", description = "Séance non trouvée")
+            @ApiResponse(responseCode = "404", description = "Séance, tuteur, module ou groupe non trouvé")
     })
     @PutMapping("/update/{id}")
-    public ResponseEntity<Object> updateSeanceStatus(@PathVariable Long id, @RequestParam boolean effectuee,
+    public ResponseEntity<Object> updateSeanceDetails(
+            @PathVariable Long id,
+            @RequestBody SeanceDTO seanceDTO,
             HttpServletRequest request) {
+
         try {
             String role = jwtService.extractRoleFromToken(request);
 
+            System.out.println(seanceDTO);
+
+
             if (USER_ROLE_ADMIN.equals(role) || USER_ROLE_TRACKER.equals(role)) {
-                SeanceDTO updatedSeance = seanceService.updateSeanceStatus(id, effectuee);
+                SeanceDTO updatedSeance = seanceService.updateSeanceDetails(
+                        id, seanceDTO.getTuteur().getId(), seanceDTO.getModule().getId(),
+                        seanceDTO.getGroupe().getId(), seanceDTO.getDate(),
+                        seanceDTO.getHeuresEffectuees(), seanceDTO.getHeuresNonEffectuees(),
+                        seanceDTO.isEffectuee());
                 return ResponseEntity.ok(updatedSeance);
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
