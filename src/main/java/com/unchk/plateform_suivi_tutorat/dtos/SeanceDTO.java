@@ -15,9 +15,11 @@ public class SeanceDTO {
     private List<String> dates;
 
     // Constructors
-    public SeanceDTO() {}
+    public SeanceDTO() {
+    }
 
-    public SeanceDTO(Long id, LocalDateTime date, boolean effectuee, int heuresEffectuees, int heuresNonEffectuees, TuteurDTO tuteur, ModuleDTO module, GroupeDTO groupe, List<String> dates) {
+    public SeanceDTO(Long id, LocalDateTime date, boolean effectuee, int heuresEffectuees, int heuresNonEffectuees,
+            TuteurDTO tuteur, ModuleDTO module, GroupeDTO groupe, List<String> dates) {
         this.id = id;
         this.date = date;
         this.effectuee = effectuee;
@@ -30,19 +32,76 @@ public class SeanceDTO {
     }
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public LocalDateTime getDate() { return date; }
-    public void setDate(LocalDateTime date) { this.date = date; }
-    public void setEffectuee(boolean effectuee) { this.effectuee = effectuee; }
-    public void setHeuresEffectuees(int heuresEffectuees) { this.heuresEffectuees = heuresEffectuees; }
-    public void setHeuresNonEffectuees(int heuresNonEffectuees) { this.heuresNonEffectuees = heuresNonEffectuees; }
-    public TuteurDTO getTuteur() { return tuteur; }
-    public void setTuteur(TuteurDTO tuteur) { this.tuteur = tuteur; }
-    public ModuleDTO getModule() { return module; }
-    public void setModule(ModuleDTO module) { this.module = module; }
-    public GroupeDTO getGroupe() { return groupe; }
-    public void setGroupe(GroupeDTO groupe) { this.groupe = groupe; }
-    public void setDates(List<String> dates) { this.dates = dates; }
-}
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setEffectuee(boolean effectuee) {
+        this.effectuee = effectuee;
+    }
+
+    public void setHeuresEffectuees(int heuresEffectuees) {
+        this.heuresEffectuees = heuresEffectuees;
+    }
+
+    public void setHeuresNonEffectuees(int heuresNonEffectuees) {
+        this.heuresNonEffectuees = heuresNonEffectuees;
+    }
+
+    public TuteurDTO getTuteur() {
+        return tuteur;
+    }
+
+    public void setTuteur(TuteurDTO tuteur) {
+        this.tuteur = tuteur;
+    }
+
+    public ModuleDTO getModule() {
+        return module;
+    }
+
+    public void setModule(ModuleDTO module) {
+        this.module = module;
+    }
+
+    public GroupeDTO getGroupe() {
+        return groupe;
+    }
+
+    public void setGroupe(GroupeDTO groupe) {
+        this.groupe = groupe;
+    }
+
+    public void setDates(List<String> dates) {
+        this.dates = dates;
+    }
+
+    public boolean isEffectuee() {
+        return effectuee;
+    }
+
+    public int getHeuresEffectuees() {
+        return heuresEffectuees;
+    }
+
+    public int getHeuresNonEffectuees() {
+        return heuresNonEffectuees;
+    }
+
+    public List<String> getDates() {
+        return dates;
+    }
+
+}

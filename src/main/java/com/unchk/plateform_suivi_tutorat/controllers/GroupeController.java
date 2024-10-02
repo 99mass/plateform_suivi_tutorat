@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.unchk.plateform_suivi_tutorat.services.GroupeService.ERROR_MODULE_ASSOCIATED;
-
 @RestController
 @RequestMapping("/api/groupes")
 public class GroupeController {
@@ -44,7 +42,7 @@ public class GroupeController {
                     @ApiResponse(responseCode = "200", description = "Liste des groupes récupérée avec succès"),
                     @ApiResponse(responseCode = "500", description = "Erreur serveur")
             })
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Groupe>> getAllGroupes() {
         List<Groupe> groupes = groupeService.getAllGroupes();
         return new ResponseEntity<>(groupes, HttpStatus.OK);
@@ -102,7 +100,7 @@ public class GroupeController {
                     @ApiResponse(responseCode = "400", description = "Requête invalide"),
                     @ApiResponse(responseCode = "500", description = "Erreur serveur")
             })
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Object> updateGroupe(@PathVariable Long id, @RequestBody Groupe groupeDetails, HttpServletRequest request) {
         try {
             String role = jwtService.extractRoleFromToken(request);
@@ -130,7 +128,7 @@ public class GroupeController {
                     @ApiResponse(responseCode = "400", description = "Requête invalide"),
                     @ApiResponse(responseCode = "500", description = "Erreur serveur")
             })
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> deleteGroupe(@PathVariable Long id, HttpServletRequest request) {
         try {
             String role = jwtService.extractRoleFromToken(request);

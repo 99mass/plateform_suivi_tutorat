@@ -17,7 +17,6 @@ public class ModuleService {
 
     public static final String ERROR_NOT_FOUND="Module non trouvé";
     private static final String ERROR_FOUND="Un module avec ce nom existe déjà";
-    private static final String ERROR_FOUND_2="Une des informations n'est pas correct";
     private static final String ERROR_NOT_EMPTY="Un module ne peut pas etre vide";
     private static final String ERROR_EMPTY_CHAMPS="Au moins une des informations doit etre modifier";
     private static final String ERROR_Type="Le nombre de semaine ne peut etre inférieur a 0";

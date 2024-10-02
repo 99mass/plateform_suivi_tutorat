@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.unchk.plateform_suivi_tutorat.services.TuteurService.MODULE_NOT_FOUND;
-
 @Service
 public class GroupeService {
 

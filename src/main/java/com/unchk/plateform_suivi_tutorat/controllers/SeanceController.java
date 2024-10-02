@@ -2,7 +2,6 @@ package com.unchk.plateform_suivi_tutorat.controllers;
 
 import com.unchk.plateform_suivi_tutorat.Utiles.ErrorResponse;
 import com.unchk.plateform_suivi_tutorat.dtos.SeanceDTO;
-import com.unchk.plateform_suivi_tutorat.models.Seance;
 import com.unchk.plateform_suivi_tutorat.models.Utilisateur;
 import com.unchk.plateform_suivi_tutorat.services.JwtService;
 import com.unchk.plateform_suivi_tutorat.services.SeanceService;
@@ -40,15 +39,15 @@ public class SeanceController {
     @GetMapping("/all")
     public ResponseEntity<Object> getAllSeances(HttpServletRequest request) {
         try {
-            // String role = jwtService.extractRoleFromToken(request);
+            String role = jwtService.extractRoleFromToken(request);
 
-            // if (USER_ROLE_ADMIN.equals(role) || USER_ROLE_TRACKER.equals(role)) {
+            if (USER_ROLE_ADMIN.equals(role) || USER_ROLE_TRACKER.equals(role)) {
                 List<SeanceDTO> seances = seanceService.getAllSeances();
                 return ResponseEntity.ok(seances);
-            // } else {
-            //     return ResponseEntity.status(HttpStatus.FORBIDDEN)
-            //             .body(new ErrorResponse(USER_FORBIDDEN_MESSAGE));
-            // }
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(new ErrorResponse(USER_FORBIDDEN_MESSAGE));
+            }
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponse(e.getMessage()));
@@ -122,6 +121,25 @@ public class SeanceController {
     })
     @PutMapping("/update/{id}")
     public ResponseEntity<Object> updateSeanceStatus(@PathVariable Long id, @RequestParam boolean effectuee,
+            HttpServletRequest request) {
+        try {
+            String role = jwtService.extractRoleFromToken(request);
+
+            if (USER_ROLE_ADMIN.equals(role) || USER_ROLE_TRACKER.equals(role)) {
+                SeanceDTO updatedSeance = seanceService.updateSeanceStatus(id, effectuee);
+                return ResponseEntity.ok(updatedSeance);
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(new ErrorResponse(USER_FORBIDDEN_MESSAGE));
+            }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    @PutMapping("/marked/{id}")
+    public ResponseEntity<Object> markedSeanceStatus(@PathVariable Long id, @RequestParam boolean effectuee,
             HttpServletRequest request) {
         try {
             String role = jwtService.extractRoleFromToken(request);

@@ -1,12 +1,8 @@
 // Module.java
 package com.unchk.plateform_suivi_tutorat.models;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Entity
