@@ -202,7 +202,7 @@ public class UtilisateurController {
     })
     @PostMapping("/create-user")
     public ResponseEntity<Object> createUser(@RequestBody Utilisateur utilisateur, HttpServletRequest request) {
-        System.out.println("user: " + utilisateur);
+ 
         try {
             String role = jwtService.extractRoleFromToken(request);
 

@@ -15,3 +15,7 @@ http://localhost:8080/swagger-ui/index.html
     MySQL user: breukh
     Mot de passe: Cthvm@1234
     ```
+## Space de depot
+```
+ https://6oeu038yo5u6-1.unchk.sn/mod/assign/view.php?id=20700&action=view
+```

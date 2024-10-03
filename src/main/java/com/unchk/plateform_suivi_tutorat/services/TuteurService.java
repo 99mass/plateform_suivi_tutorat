@@ -134,7 +134,7 @@ public class TuteurService {
                         tuteur.getEmail(),
                         tuteur.getTelephone(),
                         tuteur.getRole().name(),
-                        (null),
+                        moduleDTOs,
                         null
                 ),
                 moduleDTOs
@@ -155,8 +155,8 @@ public class TuteurService {
                         tuteur.getEmail(),
                         tuteur.getTelephone(),
                         tuteur.getRole().name(),
-                        (null),
-                        null
+                        null,
+                        groupeDTOs
                 ),
                 groupeDTOs
         );
