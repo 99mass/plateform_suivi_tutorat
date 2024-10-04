@@ -1,0 +1,15 @@
+/* src/pages/DashboardPage.css */
+.dashboard-page {
+    padding: 20px;
+  }
+  
+  .dashboard-page h1 {
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .dashboard-page p {
+    font-size: 1.2rem;
+    color: #666;
+  }
+  

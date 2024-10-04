@@ -1,0 +1,93 @@
+/* src/pages/LoginPage.css */
+.main-login {
+  background-image: url("../../public/assets/cas-bg.jpg");
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-page {
+  background-color: var(--white-F5F5F5);
+  padding: 40px;
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 40px auto;
+  border-radius: 0px;
+  box-shadow: 0 4px 10px 4px rgb(19 35 47 / 30%);
+  margin-top: 80px;
+  border-left: solid 10px var(--orange-cb6f29);
+}
+
+.login-page h1 {
+  font-family: Tahoma, sans-serif;
+  font-size: 40px;
+  padding-bottom: 20px;
+  color: var(--green-00A03A);
+  text-transform: uppercase;
+  font-weight: normal;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.login-page form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+}
+
+.login-page input {
+  width: 350px;
+  margin-top: 10px;
+}
+
+.login-page .icon-eyes {
+  width: 60px;
+  height: 60px;
+  border: 0;
+  transition: all 0.5s ease;
+}
+
+.login-page button {
+  display: block;
+  width: 100%;
+  height: 50px;
+  border: 0;
+  outline: none;
+  border-radius: 0;
+  font-size: 2rem;
+  font-weight: 300;
+  text-transform: capitalize;
+  letter-spacing: .1em;
+  background: var(--green-00A03A) !important;
+  color: var(--white);
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+
+.login-page .link-href {
+  color: var(--cas-theme-primary);
+  margin-top: 40px;
+  font-size: 18px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  text-decoration: underline;
+}
+
+.login-page .link-href:hover,
+.login-page .link-href:visited,
+.login-page .link-href:active {
+
+  color: var(--cas-theme-primary);
+}
+
+.error-message {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 15px;
+  color: var(--marrron);
+}
