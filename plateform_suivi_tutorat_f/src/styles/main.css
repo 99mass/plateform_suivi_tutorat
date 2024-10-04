@@ -1,0 +1,56 @@
+.main-page {
+  background: #e7e7e7;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-body {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 100px;
+}
+
+
+.body-page {
+  flex-grow: 1;
+  margin-left: 280px; /* Width of expanded NavbarLeft */
+  transition: margin-left 0.3s ease;
+  padding: 20px;
+}
+
+.body-page.expanded {
+  margin-left: 60px; /* Width of collapsed NavbarLeft */
+}
+
+.bloc-card {
+  height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .body-page,
+  .body-page.expanded {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+
+/* Dasboard Tuteur */
+
+.main-tuteur-dasboard{
+   width: 100%;
+   height: 100vh;
+   display: flex;
+   justify-content: flex-start;
+   padding: 100px;
+}
+
+
+/* Profile */
+.main-page-profile{
+  height: 100vh;
+}
+
+.main-tuteur-profile{
+  margin-top: 100px;
+}

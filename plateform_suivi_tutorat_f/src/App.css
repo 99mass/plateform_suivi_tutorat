@@ -1,0 +1,53 @@
+:root {
+  --cas-theme-primary: #153e50;
+  --cas-theme-primary-bg: rgba(21, 62, 80, 0.2);
+  --cas-theme-primary-light: #006d85;
+  --cas-theme-secondary: #74C163;
+  --cas-theme-success: var(--cas-theme-secondary);
+  --cas-theme-danger: var(--mdc-theme-error);
+  --cas-theme-warning: #e6a210;
+  --cas-theme-border-light: 1px solid rgba(0, 0, 0, .2);
+  --cas-theme-twitter-color: #55acee;
+  --cas-theme-vimeo-color: #1ab7ea;
+  --cas-theme-vk-color: #587ea3;
+  --cas-theme-yahoo-color: #720e9e;
+  --cas-theme-google-color: #CC5445;
+  --cas-theme-facebook-color: #3B5998;
+  --atlassian-theme-primary: #0747a6;
+  --mdc-theme-primary: var(--cas-theme-primary, #153e50);
+  --orange-cb6f29: #cb6f29;
+  --green-00A03A: #00A03A;
+  --white-F5F5F5: #F5F5F5;
+  --white: #ffffff;
+  --marrron: rgb(143, 16, 16);
+}
+body{
+  background: #e7e7e7;
+  height: fit-content;
+}
+
+/* Styles pour les navigateurs WebKit (Chrome, Safari, newer versions of Opera) */
+::-webkit-scrollbar {
+  width: 8px;  /* Largeur de la barre de défilement verticale */
+  height: 8px; /* Hauteur de la barre de défilement horizontale */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Couleur de fond de la piste */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Couleur de la barre de défilement */
+  border-radius: 4px; /* Coins arrondis */
+  height: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Couleur de la barre de défilement au survol */
+}
+
+/* Styles pour Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}

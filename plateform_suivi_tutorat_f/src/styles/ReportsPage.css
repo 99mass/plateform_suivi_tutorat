@@ -1,0 +1,15 @@
+/* src/pages/ReportsPage.css */
+.reports-page {
+    padding: 20px;
+  }
+  
+  .reports-page h1 {
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .reports-page p {
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
