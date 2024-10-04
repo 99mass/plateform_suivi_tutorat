@@ -36,9 +36,9 @@ const BlocCadre = () => {
 
             const fetchedSeances = await SeanceService.getAllSeances();
 
-            const fetchedAdmin = await UserService.listUsers("admin");
+            const fetchedAdmin = await UserService.listUsers("Administrateur");
             setCountAdmin(fetchedAdmin.length);
-            const fetchedTracker = await UserService.listUsers("tracker");
+            const fetchedTracker = await UserService.listUsers("Tracker");
             setCountTracker(fetchedTracker.length);
             const fetchedTuteur = await UserService.listUsers("tuteur");
             setCountTuteur(fetchedTuteur.length);
